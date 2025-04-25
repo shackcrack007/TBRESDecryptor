@@ -35,7 +35,7 @@ This tool is useful for:
 1. Clone this repository or download the PowerShell script:
 
 ```powershell
-git clone https://github.com/yourusername/tbres-decryptor.git
+git clone https://github.com/shackcrack007/TBRESDecryptor.git
 ```
 
 2. No additional installation is required - the script uses built-in PowerShell capabilities.
@@ -47,7 +47,7 @@ git clone https://github.com/yourusername/tbres-decryptor.git
 Simply run the script without any parameters to scan the default TokenBroker cache location:
 
 ```powershell
-.\tbresDecryptor.ps1
+.\TBRESDecryptor.ps1
 ```
 
 This will:

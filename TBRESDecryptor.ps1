@@ -72,7 +72,7 @@ Function Parse-TBRES {
 }
 
 # Parses ResponseBytes TBRES files
-# Nov 18 2021
+
 Function Parse-TBRESResponseBytes {
 
     param(
@@ -198,7 +198,6 @@ Function Parse-TBRESResponseBytes {
         }
 
         # Parses elements from decrypted TBRES response bytes content
-        # Nov 20 2021
         Function Parse-TBRESElement {
 
             [cmdletbinding()]
