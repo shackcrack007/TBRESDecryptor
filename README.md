@@ -2,6 +2,8 @@
 
 A PowerShell tool for extracting and decrypting authentication tokens from the Windows TokenBroker cache.
 
+<video src="Tbres_decryptor_demo.mp4" width="420" height="340" controls></video>
+
 ## Overview
 
 TBRES Decryptor is a security assessment tool that helps extract valid access tokens from the Windows TokenBroker cache (`%userprofile%\AppData\Local\Microsoft\TokenBroker\Cache`). TokenBroker is a Windows component that manages authentication tokens for various Microsoft applications and services. These tokens can be used to access Azure and Microsoft 365 resources.
@@ -10,6 +12,7 @@ This tool is useful for:
 - Security researchers and penetration testers
 - Incident response teams
 - Security auditors verifying token handling
+
 
 ## Features
 

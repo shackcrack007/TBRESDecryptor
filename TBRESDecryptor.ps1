@@ -663,7 +663,20 @@ function Get-ValidTokensFromTBRES {
         $result = Get-DecryptedTBRES -FilePath $file.FullName
         if ($result -ne $null -and $result.Token) {
             Write-Host "[+] Valid token found in: $($file.FullName)"
-            $results += $result
+            
+            # Write each property on its own line to the output
+            $results += "File=$($result.File)"
+            $results += "TenantId=$($result.TenantId)"
+            $results += "TenantName=$($result.TenantName)"
+            $results += "ResourceId=$($result.ResourceId)"
+            $results += "ResourceName=$($result.ResourceName)"
+            $results += "AppId=$($result.AppId)"
+            $results += "AppName=$($result.AppName)"
+            $results += "Claims=$($result.Claims)"
+            $results += "Expires=$($result.Expires)"
+            $results += "ProviderId=$($result.ProviderId)"
+            $results += "UserName=$($result.UserName)"
+            $results += "Token=$($result.Token)"
             $results += "-------------------"
         }
     }
