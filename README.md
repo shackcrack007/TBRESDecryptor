@@ -13,6 +13,20 @@ This tool is useful for:
 - Incident response teams
 - Security auditors verifying token handling
 
+## The Token Broker Cache
+
+In Windows, the Token Broker cache is part of the Web Account Manager (WAM) and Token Broker system used for modern authentication scenarios, particularly in Microsoft Entra ID (Azure AD) and MSA (Microsoft Account) environments.
+
+#### What is the Token Broker?
+Token Broker is a Windows component (introduced in Windows 10) that handles authentication tokens for apps using Web Account Manager (WAM) APIs.
+The Token Broker cache refers to the local storage of authentication tokens (like OAuth 2.0 access tokens, refresh tokens, ID tokens) that the Token Broker manages. It allows seamless SSO (Single Sign-On) across applications without needing to prompt the user for credentials every time.
+It abstracts the process of obtaining, renewing, and caching tokens for applications, particularly Universal Windows Platform (UWP) apps and some modern Win32 apps.
+
+#### What’s it used for?
+- Enables SSO across apps that use WAM.
+- Stores tokens to reduce authentication prompts.
+- Supports conditional access and MFA scenarios.
+- Used in Entra ID login flows, especially on Windows 10+ joined devices (Hybrid/Azure AD joined).
 
 ## Features
 
