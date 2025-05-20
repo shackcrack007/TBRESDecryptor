@@ -1,3 +1,6 @@
+param(
+    [string]$TBRESDirectory
+)
 # TBRES Decryptor - Decrypts and extracts tokens from TokenBroker cache files in Windows
 # Author: Shaked (Shkedi) Ilan shackrack
 # Version: 1.0.0
@@ -8,7 +11,7 @@
 #
 # USAGE:
 #   .\tbresDecryptor.ps1                     - Scans default TokenBroker cache location
-#   Get-ValidTokensFromTBRES -RootPath <path> - Scans a custom location for .tbres files
+#   Get-ValidTokensFromTBRES -TBRESDirectory <path> - Scans a custom location for .tbres files
 #
 # REQUIREMENTS:
 #   - Windows PowerShell 5.1 or later
@@ -291,7 +294,7 @@ Function Parse-TBRESResponseBytes {
         # Second: Key = 0x01 and Value = 1025
         # These are handled in Parse-TBRESKeyValue function
         
-        $unk = Parse-TBRESKeyValue -Data $Data ([ref]$p)
+        Parse-TBRESKeyValue -Data $Data ([ref]$p)
 
         #
         # Content
@@ -310,7 +313,7 @@ Function Parse-TBRESResponseBytes {
         while ($p -le ($contentStart + $contentLength)) {
             try {
                 $element = Parse-TBRESElement -Data $Data -Position ([ref]$p)
-                if ($element -eq $null) {
+                if ($null -eq $element) {
                     return $null
                 }
                 $properties[$element.Key] = $element.Value
@@ -611,7 +614,7 @@ function Get-DecryptedTBRES {
         $rawBytes = [System.IO.File]::ReadAllBytes($FilePath)
         $parsed = Parse-TBRES -Data $rawBytes
 
-        if ($parsed -ne $null) {
+        if ($null -ne $parsed) {
             $aud = Get-AudFromAccessToken -AccessToken $parsed.WTRes_Token
             return [PSCustomObject]@{
                 File         = $FilePath
@@ -644,24 +647,26 @@ function Get-ValidTokensFromTBRES {
         Scans a directory for .tbres files, decrypts them, and returns any valid tokens found.
         By default, searches the standard TokenBroker cache location.
     
-    .PARAMETER RootPath
+    .PARAMETER TBRESDirectory
         The directory path to search for .tbres files. Defaults to the standard TokenBroker cache location.
     
     .EXAMPLE
         Get-ValidTokensFromTBRES
         
     .EXAMPLE
-        Get-ValidTokensFromTBRES -RootPath "C:\CustomPath\TokenBroker"
+        Get-ValidTokensFromTBRES TBRESDirectory "C:\CustomPath\TokenBroker"
     #>
     param(
-        [string]$RootPath = (Join-Path $env:USERPROFILE 'AppData\Local\Microsoft\TokenBroker\Cache')
+        [string]$TBRESDirectory = (Join-Path $env:USERPROFILE 'AppData\Local\Microsoft\TokenBroker\Cache')
     )
 
     $results = @()
-    $files = Get-TBRESFiles -DirectoryPath $RootPath
+    Write-Host "Checking directory " $TBRESDirectory
+    $files = Get-TBRESFiles -DirectoryPath $TBRESDirectory
     foreach ($file in $files) {
+        Write-Host "Checking " $file
         $result = Get-DecryptedTBRES -FilePath $file.FullName
-        if ($result -ne $null -and $result.Token) {
+        if ($null -ne $result -and $result.Token) {
             Write-Host "[+] Valid token found in: $($file.FullName)"
             
             # Write each property on its own line to the output
@@ -683,7 +688,16 @@ function Get-ValidTokensFromTBRES {
     return $results
 }
 
-$validTokens = Get-ValidTokensFromTBRES
+param(
+    [string]$TBRESDirectory
+)
+
+if ($TBRESDirectory) {
+    $validTokens = Get-ValidTokensFromTBRES -TBRESDirectory $TBRESDirectory
+}
+else {
+    $validTokens = Get-ValidTokensFromTBRES
+}
 
 # Write valid tokens to a file
 $outputFilePath = 'validTokens.txt'
